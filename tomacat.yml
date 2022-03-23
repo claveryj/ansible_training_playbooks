@@ -1,0 +1,7 @@
+---
+
+-name: Install of java 1.8.x
+ hosts: app1
+ become: yes
+ tasks:
+ -  yum: name="java" state="latest"

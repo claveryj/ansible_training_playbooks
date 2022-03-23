@@ -1,0 +1,42 @@
+---
+- name: install java
+  hosts: all
+  become: true
+  vars:
+   tomcat_dir: apache-tomcat-8.5.77
+  tasks:
+  - name: install java
+    yum:
+     name: java-1.8.*
+     state: present
+     update_cache: true
+- name: install tomcat
+  hosts: webservers
+  become: yes
+  tasks:
+  - name: get tomcat
+    unarchive:
+     src: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.77/bin/{{tomcat_dir}}.tar.gz
+     dest: /opt/
+     remote_src: yes
+     validate_certs: no
+
+  - name: edit context files
+    template:
+     src: context.xml.j2
+     dest: "{{item}}" 
+    loop:
+    - /opt/{{tomcat_dir}}/conf/context.xml
+    - /opt/{{tomcat_dir}}/webapps/host-manager/META-INF/conext.xml
+    - /opt/{{tomcat_dir}}/webapps/manager/META-INF/context.xml 
+
+  - name: edit user file
+    template:
+     src: tomcat-users.xml.j2
+     dest: /opt/{{tomcat_dir}}/conf/
+
+  - name: start tomcat
+    command: /opt/{{tomcat_dir}}/bin/startup.sh
+    
+  -   
+  
