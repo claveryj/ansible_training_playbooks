@@ -1,0 +1,13 @@
+---
+
+- name: Installs a package and prints the result
+  hosts: webservers
+  tasks:
+  - name: Install the package
+    yum:
+     name: git
+     state: latest
+     update_cache: yes
+    become: yes
+    register: install_result
+  - debug: var=install_result

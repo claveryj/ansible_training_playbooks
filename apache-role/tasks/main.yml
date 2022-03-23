@@ -1,0 +1,21 @@
+---
+# tasks file for apache-role
+
+- name: Install apche2 Package
+  import_tasks: debian.yml
+  when: ansible_os_family|lower == 'debian'
+- name: Install httpd on redhat
+  import_tasks: redhat.yml
+  when: ansible_os_family|lower == 'redhat'
+- name: Copy httpd configuration file
+  import_tasks: configure-redhat.yml
+  when: ansible_os_family|lower == 'redhat'
+- name copy apache2
+  import_tasks: configure-debian.yml
+  when: ansible_os_family|lower == 'debian'
+- name: Copy index.html file
+  template: src=index.html.j2 dest=/var/www/html/index.html
+  notify:
+  - restart httpd
+- name: Start and Enable httpd service
+  systemd: name=httpd state=started

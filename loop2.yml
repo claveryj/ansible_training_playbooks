@@ -1,0 +1,14 @@
+---
+- name: Loop demo
+  hosts: webservers
+  become: yes
+  vars:
+   services:
+   - sshd
+   - httpd
+  tasks:
+  - name: Check if service is started
+    systemd:
+     name: "{{ item }}"
+     state: started
+    loop: "{{services}}"

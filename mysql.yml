@@ -1,0 +1,13 @@
+---
+
+- name: MySQL server installation
+  hosts: all
+  gather_facts: true
+  become: yes
+  tasks:
+  - name: Install latest MySQL server when host RAM greater than 500 MB
+    yum:
+     name: mysql-server
+     state: latest
+    when: (ansible_os_family == "Debian") and (ansible_memtotal_mb >= 900)
+

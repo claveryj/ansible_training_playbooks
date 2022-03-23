@@ -1,0 +1,10 @@
+---
+
+- name: deploy index by stage value
+  hosts: webservers
+  become: yes
+  tasks:
+  - name: copy index.html
+    copy:
+     src: "{{ stage }}_index.html"
+     dest: /var/www/html/index.html

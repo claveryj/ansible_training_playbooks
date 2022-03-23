@@ -1,0 +1,30 @@
+---
+
+- name: Apache server installed
+  hosts: webservers
+  become: yes
+  tasks:
+  - name: latest Apache version installed
+    yum:
+     name: httpd
+     state: latest
+    tags:
+    - packages
+  - name: Apache enabled and running
+    systemd:
+     name: httpd
+     enabled: true
+     state: started
+    tags:
+    - service
+  - name: copy index.html
+    copy:
+     src: index.html
+     dest: /var/www/html/
+    tags:
+    - deploy
+
+  - debug: msg="Always run"
+    tags:
+    - always
+

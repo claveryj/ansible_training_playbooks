@@ -1,0 +1,15 @@
+---
+
+- name: Hash demo
+  hosts: webservers
+  become: yes
+  tasks:
+  - name: Create users from hash
+    user:
+     name: "{{ item.name }}"
+     state: present
+     groups: "{{ item.groups }}"
+     shell: "{{ item.shell }}" 
+    loop:
+     - { name: 'jane', groups: 'wheel', shell: '/bin/bash' }
+     - { name: 'joe', groups: 'root', shell: '/bin/bash' }
